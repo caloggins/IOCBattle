@@ -5,52 +5,52 @@ using IocBattle.Benchmark.Models;
 
 namespace IocBattle.Benchmark
 {
-	public class BenchEngine 
-	{
-		private readonly IContainer _container;
+  public class BenchEngine
+  {
+    private readonly IContainer _container;
 
-		public BenchEngine(IContainer container)
-		{
-			_container = container;
-		}
+    public BenchEngine(IContainer container)
+    {
+      _container = container;
+    }
 
-		public void Start()
-		{
-			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-			GC.WaitForPendingFinalizers();
-			// Thread.Sleep(1000);
+    public void Start()
+    {
+      GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+      GC.WaitForPendingFinalizers();
+      // Thread.Sleep(1000);
 
-			RunBenchmark(_container.SetupForSingletonTest, "Singleton");
+      RunBenchmark(_container.SetupForSingletonTest, "Singleton");
 
-			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-			GC.WaitForPendingFinalizers();
-			// Thread.Sleep(1000);
+      GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+      GC.WaitForPendingFinalizers();
+      // Thread.Sleep(1000);
 
-			RunBenchmark(_container.SetupForTransientTest, "Transient");
+      RunBenchmark(_container.SetupForTransientTest, "Transient");
 
-			Console.WriteLine("");
-		}
+      Console.WriteLine("");
+    }
 
-		private void RunBenchmark(Action setupAction, string mode)
-		{
-			var regTimer = new Stopwatch();
-			var resolveTimer = new Stopwatch();
+    private void RunBenchmark(Action setupAction, string mode)
+    {
+      var regTimer = new Stopwatch();
+      var resolveTimer = new Stopwatch();
 
-			regTimer.Start();
-			setupAction();
-			regTimer.Stop();
+      regTimer.Start();
+      setupAction();
+      regTimer.Stop();
 
-			resolveTimer.Start();
+      resolveTimer.Start();
 
-			for (int i = 0; i < 1000000; i++)
-			{
-				var instance = _container.Resolve<IWebService>();
-			}
+      for (int i = 0; i < 1000000; i++)
+      {
+        var instance = _container.Resolve<IWebService>();
+      }
 
-			resolveTimer.Stop();
+      resolveTimer.Stop();
 
-			Console.WriteLine("{0}: - {1} - Registartion time: \t{2}ms", _container.Name, mode, regTimer.Elapsed.TotalMilliseconds);
-            Console.WriteLine("{0}: - {1} - Component resolve time: \t{2}ms", _container.Name, mode, resolveTimer.Elapsed.TotalMilliseconds);
-		}
-	}
+      Console.WriteLine("{0}: - {1} - Registration time: \t{2}ms", _container.Name, mode, regTimer.Elapsed.TotalMilliseconds);
+      Console.WriteLine("{0}: - {1} - Component resolve time: \t{2}ms", _container.Name, mode, resolveTimer.Elapsed.TotalMilliseconds);
+    }
+  }
 }

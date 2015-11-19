@@ -168,6 +168,7 @@
     <Compile Include="Tests\StructureMapNamedContainer.cs" />
     <Compile Include="Tests\UnityContainer.cs" />
     <Compile Include="Tests\WindsorContainer.cs" />
+    <Compile Include="Tests\WindsorContainerOriginal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
